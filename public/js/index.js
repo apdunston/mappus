@@ -41,9 +41,9 @@ function keyboardCallback(e) {
 }
 
 function clickCallback(x, y)  {
-  // console.log('clickcallback');
-  // global.view = acceptClick(global.view, x, y);
-  // drawView(canvas, global.view);
+  console.log('clickcallback');
+  global.view = acceptClick(global.view, x, y);
+  drawView(canvas, global.view);
 }
 
 initMouse(canvas, global.view, dragCallback, clickCallback);

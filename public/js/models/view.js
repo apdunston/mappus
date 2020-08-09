@@ -80,9 +80,9 @@ export function resetZoom(view) {
 
 export function acceptClick(view, x, y) {
   view = Object.assign({}, view);
+  console.log(x, y, view.topLeftX, view.topLeftY, view.pixelsPerSquare);
   x = Math.floor((x + view.topLeftX) / view.pixelsPerSquare);
   y = Math.floor((y + view.topLeftY) / view.pixelsPerSquare);
-  console.log(x, y, view.topLeftX, view.topLeftY, view.pixelsPerSquare);
   view.drawing = toggleSquare(view.drawing, x, y);
   return view;
 }

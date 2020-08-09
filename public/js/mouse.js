@@ -26,6 +26,7 @@ export function init(container, inputView, dragCallback, clickCallback) {
 
   container.addEventListener("mousedown", dragStart, false);
   container.addEventListener("mouseup", dragEnd, false);
+  container.addEventListener("mouseleave", dragEnd, false);
   container.addEventListener("mousemove", drag, false);
 
   function dragStart(e) {
