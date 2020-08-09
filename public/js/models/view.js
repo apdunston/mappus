@@ -11,35 +11,19 @@ export class View {
 
 export function draw(canvas, view, drawing) {
   var ctx = canvas.getContext("2d");
+
+  // Canvas background
   ctx.fillStyle = "gray";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+  // Drawing background
   ctx.fillStyle = "white";
   ctx.fillRect(view.topLeftX, view.topLeftY, drawing.width * view.pixelsPerSquare, drawing.height * view.pixelsPerSquare);
 
-  ctx.strokeStyle = "black";
-  ctx.lineWidth = 1;
+  // Grid
+  drawGrid(ctx, view, drawing);
 
-  for(let y = 0; y < drawing.height + 1; y++) {
-    let y1 = y * view.pixelsPerSquare + view.topLeftY;
-    let x1 = 0 + view.topLeftX;
-    let x2 = drawing.width * view.pixelsPerSquare + view.topLeftX;
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y1);
-    ctx.stroke(); 
-  }
-
-  for(let x = 0; x < drawing.width + 1; x++) {
-    let x1 = x * view.pixelsPerSquare + view.topLeftX;
-    let y1 = 0 + view.topLeftY;
-    let y2 = drawing.height * view.pixelsPerSquare + view.topLeftY;
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x1, y2);
-    ctx.stroke(); 
-  }
-
+  // Squares
   drawing.squares.forEach(square => {
     let x = square.x * view.pixelsPerSquare + view.topLeftX;
     let y = square.y * view.pixelsPerSquare + view.topLeftY;
@@ -79,4 +63,29 @@ export function pixelToSquareXY(view, xy) {
   let x = Math.floor((xy[0] - view.topLeftX) / view.pixelsPerSquare);
   let y = Math.floor((xy[1] - view.topLeftY) / view.pixelsPerSquare);
   return [x, y]
+}
+
+function drawGrid(ctx, view, drawing) {
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 1;
+
+  for(let y = 0; y < drawing.height + 1; y++) {
+    let y1 = y * view.pixelsPerSquare + view.topLeftY;
+    let x1 = 0 + view.topLeftX;
+    let x2 = drawing.width * view.pixelsPerSquare + view.topLeftX;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y1);
+    ctx.stroke(); 
+  }
+
+  for(let x = 0; x < drawing.width + 1; x++) {
+    let x1 = x * view.pixelsPerSquare + view.topLeftX;
+    let y1 = 0 + view.topLeftY;
+    let y2 = drawing.height * view.pixelsPerSquare + view.topLeftY;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x1, y2);
+    ctx.stroke(); 
+  }
 }

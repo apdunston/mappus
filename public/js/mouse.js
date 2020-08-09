@@ -51,7 +51,7 @@ export function init(container, inputView, dragStartCallback, dragCallback, clic
       initialY = e.offsetY;
     }
 
-    dragStartCallback(initialX, initialY);
+    dragStartCallback(initialX, initialY, modifierKey);
   }
 
   function dragEnd(e) {

@@ -32,6 +32,7 @@ export function init(document) {
   function keyboardCallback(e) {
     if(e.key == "-") {
       global.view = zoomOut(global.view);
+      console.log(global.view.pixelsPerSquare);
     }
 
     if (e.key == "=") {
@@ -45,10 +46,12 @@ export function init(document) {
     draw(canvas, global.view, global.drawing);
   }
   
-  function dragStartCallback(x, y) {
-    let xy = pixelToSquareXY(global.view, [x, y]);
-    dragAdds = !squareExistsAt(global.drawing, xy[0], xy[1])
-    toggle(xy[0], xy[1]);
+  function dragStartCallback(x, y, modifierKey) {
+    if (!modifierKey) {
+      let xy = pixelToSquareXY(global.view, [x, y]);
+      dragAdds = !squareExistsAt(global.drawing, xy[0], xy[1])
+      toggle(xy[0], xy[1]);
+    }
   }
 
   function dragCallback(x, y, modifierKey) {
