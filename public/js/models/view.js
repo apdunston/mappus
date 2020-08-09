@@ -16,7 +16,9 @@ export function drawView(canvas, view) {
   var ctx = canvas.getContext("2d");
   ctx.fillStyle = "gray";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = null;
+
+  ctx.fillStyle = "white";
+  ctx.fillRect(-view.topLeftX, -view.topLeftY, view.drawing.width * view.pixelsPerSquare, view.drawing.height * view.pixelsPerSquare);
 
   ctx.strokeStyle = "black";
   ctx.lineWidth = 1;
@@ -40,6 +42,14 @@ export function drawView(canvas, view) {
     ctx.lineTo(x1, y2);
     ctx.stroke(); 
   }
+
+  view.drawing.squares.forEach(square => {
+    let x = square.x * view.pixelsPerSquare - view.topLeftX;
+    let y = square.y * view.pixelsPerSquare - view.topLeftY;
+
+    ctx.fillStyle = "black";
+    ctx.fillRect(x, y, view.pixelsPerSquare, view.pixelsPerSquare);
+  });
 }
 
 export function zoomOut(view) {
@@ -48,7 +58,7 @@ export function zoomOut(view) {
   if (view.pixelsPerSquare > 1) {
     view.pixelsPerSquare = Math.floor(view.pixelsPerSquare * zoomFactor);
   }
-  
+
   return view;
 }
 

@@ -1,7 +1,6 @@
 export class Square {
-  constructor(x, y, val) {
+  constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.val = (val == true);
   }
 }

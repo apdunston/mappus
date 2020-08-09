@@ -1,3 +1,5 @@
+import { Square } from "./square.js";
+
 export class Drawing {
   constructor(width, height) {
     this.width = width;
@@ -7,6 +9,14 @@ export class Drawing {
 }
 
 export function toggleSquare(drawing, x, y) {
- var square = drawing.squares.find(square => square.x == x && square.y == y); 
- square.value = !square.value;
+ drawing = Object.assign({}, drawing);
+ let squareIndex = drawing.squares.findIndex(square => square.x == x && square.y == y); 
+
+ if (squareIndex == -1) {
+  drawing.squares.push(new Square(x, y));
+ } else {
+  drawing.squares.splice(squareIndex, 1);
+ }
+
+ return drawing;
 }

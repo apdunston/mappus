@@ -1,6 +1,5 @@
 import {canvasToImage} from './otherPeoplesCode/canvas-to-image.js';
-import {Square} from "./models/square.js";
-import {Drawing, toggleSquare} from "./models/drawing.js";
+import {toggleSquare} from "./models/drawing.js";
 import {View, drawView, zoomOut, zoomIn, resetZoom} from "./models/view.js";
 import {init as initDrag} from "./drag.js";
 import {init as initKeyboard} from "./keyboard.js";
@@ -8,6 +7,9 @@ import {init as initKeyboard} from "./keyboard.js";
 var global = {
   view: new View(50)
 };
+
+global.view.drawing = toggleSquare(global.view.drawing, 2, 2);
+global.view.drawing = toggleSquare(global.view.drawing, 4, 4);
 
 var canvas = document.getElementById("main");
 var ctx = canvas.getContext("2d");
