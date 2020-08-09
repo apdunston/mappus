@@ -75,16 +75,6 @@ export function resetZoom(view) {
   return view;
 }
 
-export function acceptClick(view, x, y) {
-  view = Object.assign({}, view);
-  console.log(x, y, view.topLeftX, view.topLeftY, view.pixelsPerSquare);
-  x = Math.floor(x / view.pixelsPerSquare);
-  y = Math.floor(y / view.pixelsPerSquare);
-  console.log(x, y);
-
-  return view;
-}
-
 export function pixelToSquareXY(view, xy) {
   let x = Math.floor((xy[0] - view.topLeftX) / view.pixelsPerSquare);
   let y = Math.floor((xy[1] - view.topLeftY) / view.pixelsPerSquare);

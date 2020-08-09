@@ -1,5 +1,5 @@
 // import {canvasToImage} from './otherPeoplesCode/canvas-to-image.js';
-import {View, draw, zoomOut, zoomIn, resetZoom, acceptClick, pixelToSquareXY} from "./models/view.js";
+import {View, draw, zoomOut, zoomIn, resetZoom, pixelToSquareXY} from "./models/view.js";
 import {toggleSquare, squareExistsAt} from "./models/drawing.js";
 import {init as initMouse} from "./mouse.js";
 import {Drawing} from "./models/drawing.js";
@@ -47,7 +47,8 @@ export function init(document) {
   
   function dragStartCallback(x, y) {
     let xy = pixelToSquareXY(global.view, [x, y]);
-    console.log(x, y, xy, squareExistsAt(global.drawing, xy[0], xy[1]));
+    dragAdds = !squareExistsAt(global.drawing, xy[0], xy[1])
+    toggle(xy[0], xy[1]);
   }
 
   function dragCallback(x, y, modifierKey) {
@@ -55,7 +56,14 @@ export function init(document) {
       global.view.topLeftX = x;
       global.view.topLeftY = y;
     } else {
-      global.view = acceptClick(global.view, x, y);
+      let xy = pixelToSquareXY(global.view, [x, y]);
+      x = xy[0];
+      y = xy[1];
+      let exists = squareExistsAt(global.drawing, x, y);
+
+      if (dragAdds != exists) {
+        toggle(x, y);
+      }
     }
 
     draw(canvas, global.view, global.drawing);
