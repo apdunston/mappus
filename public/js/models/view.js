@@ -43,14 +43,18 @@ export function drawView(canvas, view) {
 }
 
 export function zoomOut(view) {
+  view = Object.assign({}, view);
+  
   if (view.pixelsPerSquare > 1) {
     view.pixelsPerSquare = Math.floor(view.pixelsPerSquare * zoomFactor);
   }
-
+  
   return view;
 }
 
 export function zoomIn(view) {
+  view = Object.assign({}, view);
+
   if (view.pixelsPerSquare < 100) {
     view.pixelsPerSquare = Math.ceil(view.pixelsPerSquare * (2 - zoomFactor));
   }
@@ -59,6 +63,7 @@ export function zoomIn(view) {
 }
 
 export function resetZoom(view) {
+  view = Object.assign({}, view);
   view.pixelsPerSquare = view.initialPixelsPerSquare;
   return view;
 }

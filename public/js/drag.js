@@ -1,7 +1,12 @@
 //https://www.kirupa.com/html5/drag.htm
 
-export function init(container, callback, xOffset, yOffset) {
+var view;
+
+export function init(container, inputView, callback) {
   var container = document.querySelector("#main");
+  view = inputView;
+  var xOffset = -view.topLeftX;
+  var yOffset = -view.topLeftY;
 
   var active = false;
   var currentX;
