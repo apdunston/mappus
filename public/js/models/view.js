@@ -1,5 +1,3 @@
-import {Drawing} from "./drawing.js";
-
 const zoomFactor = 0.8
 
 export class View {
@@ -8,42 +6,41 @@ export class View {
     this.pixelsPerSquare = pixelsPerSquare;
     this.topLeftX = 10;
     this.topLeftY = 10;
-    this.drawing = new Drawing(540, 540);
   }
 }
 
-export function drawView(canvas, view) {
+export function draw(canvas, view, drawing) {
   var ctx = canvas.getContext("2d");
   ctx.fillStyle = "gray";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   ctx.fillStyle = "white";
-  ctx.fillRect(view.topLeftX, view.topLeftY, view.drawing.width * view.pixelsPerSquare, view.drawing.height * view.pixelsPerSquare);
+  ctx.fillRect(view.topLeftX, view.topLeftY, drawing.width * view.pixelsPerSquare, drawing.height * view.pixelsPerSquare);
 
   ctx.strokeStyle = "black";
   ctx.lineWidth = 1;
 
-  for(let y = 0; y < view.drawing.height + 1; y++) {
+  for(let y = 0; y < drawing.height + 1; y++) {
     let y1 = y * view.pixelsPerSquare + view.topLeftY;
     let x1 = 0 + view.topLeftX;
-    let x2 = view.drawing.width * view.pixelsPerSquare + view.topLeftX;
+    let x2 = drawing.width * view.pixelsPerSquare + view.topLeftX;
     ctx.beginPath();
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y1);
     ctx.stroke(); 
   }
 
-  for(let x = 0; x < view.drawing.width + 1; x++) {
+  for(let x = 0; x < drawing.width + 1; x++) {
     let x1 = x * view.pixelsPerSquare + view.topLeftX;
     let y1 = 0 + view.topLeftY;
-    let y2 = view.drawing.height * view.pixelsPerSquare + view.topLeftY;
+    let y2 = drawing.height * view.pixelsPerSquare + view.topLeftY;
     ctx.beginPath();
     ctx.moveTo(x1, y1);
     ctx.lineTo(x1, y2);
     ctx.stroke(); 
   }
 
-  view.drawing.squares.forEach(square => {
+  drawing.squares.forEach(square => {
     let x = square.x * view.pixelsPerSquare + view.topLeftX;
     let y = square.y * view.pixelsPerSquare + view.topLeftY;
 
