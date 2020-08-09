@@ -2,17 +2,23 @@
 
 var view;
 
-export function init(container, inputView, callback) {
+export function init(container, inputView, dragCallback, clickCallback) {
   var container = document.querySelector("#main");
   view = inputView;
-  var xOffset = -view.topLeftX;
-  var yOffset = -view.topLeftY;
+  var xOffset = view.topLeftX;
+  var yOffset = view.topLeftY;
 
   var active = false;
   var currentX;
   var currentY;
   var initialX;
   var initialY;
+
+  container.addEventListener("click", e => {
+    clickCallback(e.clientX - xOffset, e.clientY - yOffset);
+  }, false);
+
+  container.addEventListener("contextmenu", e => {e.preventDefault(); console.log("CONTExt");}, false);
 
   container.addEventListener("touchstart", dragStart, false);
   container.addEventListener("touchend", dragEnd, false);
@@ -57,7 +63,7 @@ export function init(container, inputView, callback) {
       xOffset = currentX;
       yOffset = currentY;
 
-      callback(currentX, currentY);
+      dragCallback(currentX, currentY);
     }
   }
 }

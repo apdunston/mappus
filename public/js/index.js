@@ -1,7 +1,7 @@
 import {canvasToImage} from './otherPeoplesCode/canvas-to-image.js';
 import {toggleSquare} from "./models/drawing.js";
-import {View, drawView, zoomOut, zoomIn, resetZoom} from "./models/view.js";
-import {init as initDrag} from "./drag.js";
+import {View, drawView, zoomOut, zoomIn, resetZoom, acceptClick} from "./models/view.js";
+import {init as initMouse} from "./mouse.js";
 import {init as initKeyboard} from "./keyboard.js";
 
 var global = {
@@ -18,8 +18,8 @@ ctx.canvas.height = window.innerHeight;
 drawView(canvas, global.view);
 
 function dragCallback(x, y) {
-  global.view.topLeftX = -x;
-  global.view.topLeftY = -y;
+  global.view.topLeftX = x;
+  global.view.topLeftY = y;
   drawView(canvas, global.view);
 }
 
@@ -35,12 +35,18 @@ function keyboardCallback(e) {
   }
 
   if (e.key == "0") {
-    view = resetZoom(global.view);
+    global.view = resetZoom(global.view);
     drawView(canvas, global.view);
   }
 }
 
-initDrag(canvas, global.view, dragCallback);
+function clickCallback(x, y)  {
+  // console.log('clickcallback');
+  // global.view = acceptClick(global.view, x, y);
+  // drawView(canvas, global.view);
+}
+
+initMouse(canvas, global.view, dragCallback, clickCallback);
 initKeyboard(document, canvas, global.view, keyboardCallback);
 
 
