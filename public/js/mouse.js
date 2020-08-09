@@ -2,7 +2,7 @@
 
 var view;
 
-export function init(container, inputView, dragCallback, clickCallback) {
+export function init(container, inputView, dragStartCallback, dragCallback, clickCallback) {
   var container = document.querySelector("#main");
   view = inputView;
   var xOffset = view.topLeftX;
@@ -38,41 +38,53 @@ export function init(container, inputView, dragCallback, clickCallback) {
     modifierKey = detectModifierKey(e);
     active = true;
 
-    if (e.type === "touchstart") {
-      initialX = e.touches[0].clientX - xOffset;
-      initialY = e.touches[0].clientY - yOffset;
+    if (modifierKey) {
+      if (e.type === "touchstart") {
+        initialX = e.touches[0].clientX - xOffset;
+        initialY = e.touches[0].clientY - yOffset;
+      } else {
+        initialX = e.clientX - xOffset;
+        initialY = e.clientY - yOffset;
+      }
     } else {
-      initialX = e.clientX - xOffset;
-      initialY = e.clientY - yOffset;
+      initialX = e.offsetX;
+      initialY = e.offsetY;
     }
+
+    dragStartCallback(initialX, initialY);
   }
 
   function dragEnd(e) {
-    initialX = currentX;
-    initialY = currentY;
+    if (modifierKey) {
+      initialX = currentX;
+      initialY = currentY;
+    }
 
     active = false;
   }
 
   function drag(e) {
-    if (active) {
-    
+    if (active) {      
       e.preventDefault();
     
-      if (e.type === "touchmove") {
-        currentX = e.touches[0].clientX - initialX;
-        currentY = e.touches[0].clientY - initialY;
-      } else {
-        currentX = e.clientX - initialX;
-        currentY = e.clientY - initialY;
-      }
-
       if (modifierKey) {
-        xOffset = currentX;
-        yOffset = currentY;
-      }
+        if (e.type === "touchmove") {
+          currentX = e.touches[0].clientX - initialX;
+          currentY = e.touches[0].clientY - initialY;
+        } else {
+          currentX = e.clientX - initialX;
+          currentY = e.clientY - initialY;
+        }
 
-      dragCallback(currentX, currentY, modifierKey);
+        if (modifierKey) {
+          xOffset = currentX;
+          yOffset = currentY;
+        }
+
+        dragCallback(currentX, currentY, modifierKey);
+      } else {
+        dragCallback(e.offsetX, e.offsetY, modifierKey);
+      }
     }
   }
 

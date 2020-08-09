@@ -20,3 +20,7 @@ export function toggleSquare(drawing, x, y) {
 
  return drawing;
 }
+
+export function squareExistsAt(drawing, x, y) {
+  return drawing.squares.findIndex(square => square.x == x && square.y == y) != -1;
+}

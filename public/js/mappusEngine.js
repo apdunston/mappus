@@ -1,6 +1,6 @@
 // import {canvasToImage} from './otherPeoplesCode/canvas-to-image.js';
-import {View, drawView, zoomOut, zoomIn, resetZoom, acceptClick} from "./models/view.js";
-import {toggleSquare} from "./models/drawing.js";
+import {View, drawView, zoomOut, zoomIn, resetZoom, acceptClick, pixelToSquareXY} from "./models/view.js";
+import {toggleSquare, squareExistsAt} from "./models/drawing.js";
 import {init as initMouse} from "./mouse.js";
 import {init as initKeyboard} from "./keyboard.js";
 
@@ -26,6 +26,8 @@ export function init(document) {
   ctx.canvas.height = window.innerHeight;
   drawView(canvas, global.view);
 
+  var dragAdds = true;
+
   function keyboardCallback(e) {
     if(e.key == "-") {
       global.view = zoomOut(global.view);
@@ -41,6 +43,11 @@ export function init(document) {
       global.view = resetZoom(global.view);
       drawView(canvas, global.view);
     }
+  }
+  
+  function dragStartCallback(x, y) {
+    let xy = pixelToSquareXY(global.view, [x, y]);
+    console.log(x, y, xy, squareExistsAt(global.view.drawing, xy[0], xy[1]));
   }
 
   function dragCallback(x, y, modifierKey) {
@@ -61,7 +68,7 @@ export function init(document) {
     // }
   }
 
-  initMouse(canvas, global.view, dragCallback, clickCallback);
+  initMouse(canvas, global.view, dragStartCallback, dragCallback, clickCallback);
   initKeyboard(document, canvas, global.view, keyboardCallback);
 
 

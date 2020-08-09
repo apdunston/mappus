@@ -1,4 +1,4 @@
-import {Drawing, toggleSquare} from "./drawing.js";
+import {Drawing} from "./drawing.js";
 
 const zoomFactor = 0.8
 
@@ -86,4 +86,10 @@ export function acceptClick(view, x, y) {
   console.log(x, y);
 
   return view;
+}
+
+export function pixelToSquareXY(view, xy) {
+  let x = Math.floor((xy[0] - view.topLeftX) / view.pixelsPerSquare);
+  let y = Math.floor((xy[1] - view.topLeftY) / view.pixelsPerSquare);
+  return [x, y]
 }
