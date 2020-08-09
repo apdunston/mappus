@@ -17,12 +17,6 @@ ctx.canvas.width  = window.innerWidth;
 ctx.canvas.height = window.innerHeight;
 drawView(canvas, global.view);
 
-function dragCallback(x, y) {
-  global.view.topLeftX = x;
-  global.view.topLeftY = y;
-  drawView(canvas, global.view);
-}
-
 function keyboardCallback(e) {
   if(e.key == "-") {
     global.view = zoomOut(global.view);
@@ -40,10 +34,19 @@ function keyboardCallback(e) {
   }
 }
 
-function clickCallback(x, y)  {
-  console.log('clickcallback');
-  global.view = acceptClick(global.view, x, y);
-  drawView(canvas, global.view);
+function dragCallback(x, y, modifierKey) {
+  if (modifierKey) {
+    global.view.topLeftX = x;
+    global.view.topLeftY = y;
+    drawView(canvas, global.view);
+  }
+}
+
+function clickCallback(x, y, modifierKey)  {
+  if (!modifierKey) {
+    global.view = acceptClick(global.view, x, y);
+    drawView(canvas, global.view);
+  }
 }
 
 initMouse(canvas, global.view, dragCallback, clickCallback);

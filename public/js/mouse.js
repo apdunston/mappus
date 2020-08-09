@@ -9,13 +9,17 @@ export function init(container, inputView, dragCallback, clickCallback) {
   var yOffset = view.topLeftY;
 
   var active = false;
+  var modifierKey = false;
   var currentX;
   var currentY;
   var initialX;
   var initialY;
 
+  // Mac command key is "meta"
   container.addEventListener("click", e => {
-    clickCallback(e.clientX - xOffset, e.clientY - yOffset);
+    // console.log(e.button, e.which, e.ctrlKey, e.altKey, e.metaKey, e.shiftKey, e.movementX, e.movementY);  
+
+    clickCallback(e.offsetX, e.offsetY, detectModifierKey(e));
   }, false);
 
   container.addEventListener("contextmenu", e => {e.preventDefault(); console.log("CONTExt");}, false);
@@ -38,6 +42,7 @@ export function init(container, inputView, dragCallback, clickCallback) {
       initialY = e.clientY - yOffset;
     }
 
+    modifierKey = detectModifierKey(e);
     active = true;
   }
 
@@ -61,10 +66,14 @@ export function init(container, inputView, dragCallback, clickCallback) {
         currentY = e.clientY - initialY;
       }
 
-      xOffset = currentX;
-      yOffset = currentY;
+      if (modifierKey) {
+        xOffset = currentX;
+        yOffset = currentY;
+      }
 
-      dragCallback(currentX, currentY);
+      dragCallback(currentX, currentY, modifierKey);
     }
   }
+
+  function detectModifierKey(e) { return e.ctrlKey || e.altKey || e.metaKey || e.shiftKey }
 }
