@@ -38,15 +38,18 @@ function dragCallback(x, y, modifierKey) {
   if (modifierKey) {
     global.view.topLeftX = x;
     global.view.topLeftY = y;
-    drawView(canvas, global.view);
+  } else {
+    global.view = acceptClick(global.view, x, y);
   }
+
+  drawView(canvas, global.view);
 }
 
 function clickCallback(x, y, modifierKey)  {
-  if (!modifierKey) {
-    global.view = acceptClick(global.view, x, y);
-    drawView(canvas, global.view);
-  }
+  // if (!modifierKey) {
+  //   global.view = acceptClick(global.view, x, y);
+  //   drawView(canvas, global.view);
+  // }
 }
 
 initMouse(canvas, global.view, dragCallback, clickCallback);

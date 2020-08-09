@@ -10,6 +10,7 @@ export function init(container, inputView, dragCallback, clickCallback) {
 
   var active = false;
   var modifierKey = false;
+
   var currentX;
   var currentY;
   var initialX;
@@ -34,6 +35,9 @@ export function init(container, inputView, dragCallback, clickCallback) {
   container.addEventListener("mousemove", drag, false);
 
   function dragStart(e) {
+    modifierKey = detectModifierKey(e);
+    active = true;
+
     if (e.type === "touchstart") {
       initialX = e.touches[0].clientX - xOffset;
       initialY = e.touches[0].clientY - yOffset;
@@ -41,9 +45,6 @@ export function init(container, inputView, dragCallback, clickCallback) {
       initialX = e.clientX - xOffset;
       initialY = e.clientY - yOffset;
     }
-
-    modifierKey = detectModifierKey(e);
-    active = true;
   }
 
   function dragEnd(e) {
