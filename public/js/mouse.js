@@ -23,7 +23,6 @@ export function init(container, inputView, dragStartCallback, dragCallback, clic
     clickCallback(e.offsetX, e.offsetY, detectModifierKey(e));
   }, false);
 
-  container.addEventListener("contextmenu", e => {e.preventDefault(); console.log("CONTExt");}, false);
 
   container.addEventListener("touchstart", dragStart, false);
   container.addEventListener("touchend", dragEnd, false);

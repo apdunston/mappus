@@ -1,8 +1,23 @@
 <html>
   <head>
+    <title>Mappus</title>
     <script src="js/index.js" type="module"></script>
+    <link href="css/modal.css" rel="stylesheet">
   </head>
   <body>
-    <canvas id="main"></canvas>
+    <div style="float: left"><canvas id="main"></canvas></div>
+    <div style="float: right">
+      <button id="save">save</button> <br>
+      <button id="load">load</button> <br>
+      <button id="img">img</button>
+    </div>
+
+    <div class="is-hidden modal-overlay">
+      <div class="modal">
+        <span class="button-close">×</span>
+        <div id="modal-body"></div>
+        <!-- <img src='https://i.imgur.com/Qnkww5n.jpg' width="95%"> -->
+      </div>
+    </div>
   </body>
 </html>

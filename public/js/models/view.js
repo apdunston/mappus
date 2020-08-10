@@ -20,8 +20,8 @@ export function draw(canvas, view, drawing) {
   ctx.fillStyle = "white";
   ctx.fillRect(view.topLeftX, view.topLeftY, drawing.width * view.pixelsPerSquare, drawing.height * view.pixelsPerSquare);
 
-  // Grid
   drawGrid(ctx, view, drawing);
+
 
   // Squares
   drawing.squares.forEach(square => {
@@ -67,9 +67,42 @@ export function pixelToSquareXY(view, xy) {
 
 function drawGrid(ctx, view, drawing) {
   ctx.strokeStyle = "black";
-  ctx.lineWidth = 1;
+  ctx.lineWidth = 0.2;
 
-  for(let y = 0; y < drawing.height + 1; y++) {
+
+  // Grid
+  var steps = 1;
+  
+  if (view.pixelsPerSquare == 1) {
+    console.log("one");
+
+    steps = 25;
+    ctx.setLineDash([2, 3]); // dashes, spaces
+  } else if (view.pixelsPerSquare < 3) {
+    console.log("two");
+
+    steps = 15;
+    ctx.setLineDash([4, 5]); // dashes, spaces
+  } else if (view.pixelsPerSquare < 5) {
+    console.log("three");
+    steps =  10;
+    ctx.setLineDash([5, 3]); // dashes, spaces
+  } else if (view.pixelsPerSquare < 9) {
+    console.log("four");
+
+    steps = 10;
+    ctx.setLineDash([6, 3]); // dashes, spaces
+  } else {
+    console.log("five");
+    ctx.setLineDash([1, 0]); // dashes, spaces
+  }
+  
+  if (steps > 1) {    
+  } else {
+    ctx.setLineDash([1, 0])
+  }
+
+  for(let y = 0; y < drawing.height + 1; y += steps) {
     let y1 = y * view.pixelsPerSquare + view.topLeftY;
     let x1 = 0 + view.topLeftX;
     let x2 = drawing.width * view.pixelsPerSquare + view.topLeftX;
@@ -79,7 +112,7 @@ function drawGrid(ctx, view, drawing) {
     ctx.stroke(); 
   }
 
-  for(let x = 0; x < drawing.width + 1; x++) {
+  for(let x = 0; x < drawing.width + 1; x += steps) {
     let x1 = x * view.pixelsPerSquare + view.topLeftX;
     let y1 = 0 + view.topLeftY;
     let y2 = drawing.height * view.pixelsPerSquare + view.topLeftY;
