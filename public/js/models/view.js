@@ -25,8 +25,8 @@ export function draw(canvas, view, drawing) {
 
   // Squares
   drawing.squares.forEach(square => {
-    let x = square.x * view.pixelsPerSquare + view.topLeftX;
-    let y = square.y * view.pixelsPerSquare + view.topLeftY;
+    let x = square[0] * view.pixelsPerSquare + view.topLeftX;
+    let y = square[1] * view.pixelsPerSquare + view.topLeftY;
 
     ctx.fillStyle = "black";
     ctx.fillRect(x, y, view.pixelsPerSquare, view.pixelsPerSquare);
@@ -74,26 +74,17 @@ function drawGrid(ctx, view, drawing) {
   var steps = 1;
   
   if (view.pixelsPerSquare == 1) {
-    console.log("one");
-
     steps = 25;
     ctx.setLineDash([2, 3]); // dashes, spaces
   } else if (view.pixelsPerSquare < 3) {
-    console.log("two");
-
     steps = 15;
     ctx.setLineDash([4, 5]); // dashes, spaces
-  } else if (view.pixelsPerSquare < 5) {
-    console.log("three");
-    steps =  10;
+  } else if (view.pixelsPerSquare < 5) {    steps =  10;
     ctx.setLineDash([5, 3]); // dashes, spaces
   } else if (view.pixelsPerSquare < 9) {
-    console.log("four");
-
     steps = 10;
     ctx.setLineDash([6, 3]); // dashes, spaces
-  } else {
-    console.log("five");
+  } else {    
     ctx.setLineDash([1, 0]); // dashes, spaces
   }
   
