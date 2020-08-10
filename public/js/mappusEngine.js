@@ -26,10 +26,8 @@ export function init(document) {
   var canvas = document.getElementById("main");
   global.canvas = canvas;
 
-  var ctx = canvas.getContext("2d");
-  ctx.canvas.width  = window.innerWidth - toolbarWidth;
-  ctx.canvas.height = window.innerHeight;
-  draw(canvas, global.view, global.drawing);
+  setCanvasSize()
+  draw(global.canvas, global.view, global.drawing);
 
   var dragAdds = true;
 
@@ -51,7 +49,7 @@ export function init(document) {
 
     }
 
-    draw(canvas, global.view, global.drawing);
+    draw(global.canvas, global.view, global.drawing);
   }
   
   function dragStartCallback(x, y, modifierKey) {
@@ -77,22 +75,23 @@ export function init(document) {
       }
     }
 
-    draw(canvas, global.view, global.drawing);
+    draw(global.canvas, global.view, global.drawing);
   }
 
   function clickCallback(_x, _y, _modifierKey)  {
   }
 
   function initToolbar(document) {
-    // var img = document.getElementById("img");
-    //   img.addEventListener("click", function () {
-    //   console.log("Imaging!");
-    //   canvasToImage("main", document, {
-    //     name: 'myImage',
-    //     type: 'png',
-    //     quality: 1
-    //   });
-    // });
+    var img = document.getElementById("img");
+    img.addEventListener("click", function () {
+      fullSizeCanvas();
+      console.log("Imaging!");
+      canvasToImage("main", document, {
+        name: 'myImage',
+        type: 'png',
+        quality: 1
+      });
+    });
     
     const modal = new Modal(document.querySelector('.modal-overlay'));
     var modalBody = document.getElementById("modal-body");
@@ -111,11 +110,26 @@ export function init(document) {
       doLoad.addEventListener("click", _e => {
         let json = document.getElementById("load-box").value;
         global.drawing = JSON.parse(json);
-        draw(canvas, global.view, global.drawing);
+        draw(global.canvas, global.view, global.drawing);
         modal.close();
       })
 
     });
+  }
+
+  function setCanvasSize() {
+    var ctx = global.canvas.getContext("2d");
+    ctx.canvas.width  = window.innerWidth - toolbarWidth;
+    ctx.canvas.height = window.innerHeight;  
+  }
+
+  function fullSizeCanvas() {
+    var ctx = global.canvas.getContext("2d");
+    ctx.canvas.width  = global.drawing.width * global.view.pixelsPerSquare + 20;
+    ctx.canvas.height = global.drawing.height * global.view.pixelsPerSquare + 20;
+    global.view.topLeftX = 10;
+    global.view.topLeftY = 10;
+    draw(global.canvas, global.view, global.drawing);
   }
 
   initMouse(canvas, global.view, dragStartCallback, dragCallback, clickCallback);
