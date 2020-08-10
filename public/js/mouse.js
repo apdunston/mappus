@@ -2,7 +2,7 @@
 
 var view;
 
-export function init(container, inputView, dragStartCallback, dragCallback, clickCallback) {
+export function init(container, inputView, dragStartCallback, dragCallback, dragEndCallback, clickCallback) {
   var container = document.querySelector("#main");
   view = inputView;
   var xOffset = view.topLeftX;
@@ -59,6 +59,7 @@ export function init(container, inputView, dragStartCallback, dragCallback, clic
       initialY = currentY;
     }
 
+    dragEndCallback(currentX, currentY, modifierKey);
     active = false;
   }
 

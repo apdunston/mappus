@@ -22,3 +22,9 @@ export function toggleSquare(drawing, x, y) {
 export function squareExistsAt(drawing, x, y) {
   return drawing.squares.findIndex(xy => xy[0] == x && xy[1] == y) != -1;
 }
+
+export function cloneDrawing(drawing) {
+  let newDrawing = new Drawing(drawing.width, drawing.height);
+  drawing.squares.forEach(xy => newDrawing.squares.push(xy));
+  return newDrawing;
+}

@@ -3,13 +3,15 @@ import {Modal} from "./otherPeoplesCode/modal.js";
 import {View, draw, zoomOut, zoomIn, resetZoom, pixelToSquareXY} from "./models/view.js";
 import {toggleSquare, squareExistsAt} from "./models/drawing.js";
 import {init as initMouse} from "./mouse.js";
-import {Drawing} from "./models/drawing.js";
+import {Drawing, cloneDrawing} from "./models/drawing.js";
 
 var toolbarWidth = 100;
 
 export var global = {
   view: new View(20),
-  drawing: new Drawing(540, 540)
+  drawing: new Drawing(540, 540),
+  history: new Array(),
+  future: new Array()
 };
 
 export function toggle(x, y) {
@@ -53,6 +55,9 @@ export function init(document) {
   }
   
   function dragStartCallback(x, y, modifierKey) {
+    global.history.push(cloneDrawing(global.drawing));
+    global.future = new Array();
+
     if (!modifierKey) {
       let xy = pixelToSquareXY(global.view, [x, y]);
       dragAdds = !squareExistsAt(global.drawing, xy[0], xy[1])
@@ -78,6 +83,9 @@ export function init(document) {
     draw(global.canvas, global.view, global.drawing);
   }
 
+  function dragEndCallback(_x, _y, _modifier) {
+  }
+
   function clickCallback(_x, _y, _modifierKey)  {
   }
 
@@ -85,7 +93,6 @@ export function init(document) {
     var img = document.getElementById("img");
     img.addEventListener("click", function () {
       fullSizeCanvas();
-      console.log("Imaging!");
       canvasToImage("main", document, {
         name: 'myImage',
         type: 'png',
@@ -113,7 +120,27 @@ export function init(document) {
         draw(global.canvas, global.view, global.drawing);
         modal.close();
       })
+    });
 
+    var undo = document.getElementById("undo");
+    undo.addEventListener("click", _e => {
+      if(global.history.length > 0) {
+        global.future.push(global.drawing);
+        global.drawing = global.history.pop();
+      }
+
+      draw(global.canvas, global.view, global.drawing);
+    });
+
+    
+    var redo = document.getElementById("redo");
+    redo.addEventListener("click", _e => {
+      if(global.future.length > 0) {
+        global.history.push(global.drawing);
+        global.drawing = global.future.pop();
+      }
+
+      draw(global.canvas, global.view, global.drawing);
     });
   }
 
@@ -132,7 +159,7 @@ export function init(document) {
     draw(global.canvas, global.view, global.drawing);
   }
 
-  initMouse(canvas, global.view, dragStartCallback, dragCallback, clickCallback);
+  initMouse(canvas, global.view, dragStartCallback, dragCallback, dragEndCallback, clickCallback);
   document.addEventListener("keypress", keyboardCallback);
 }
 
