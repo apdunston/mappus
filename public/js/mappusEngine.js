@@ -12,7 +12,8 @@ export var global = {
   drawing: new Drawing(540, 540),
   history: new Array(),
   future: new Array(),
-  mode: "draw"
+  mode: "draw",
+  dragAdds: true
 };
 
 export function toggle(x, y) {
@@ -32,8 +33,6 @@ export function init(document) {
   setCanvasSize()
   draw(global.canvas, global.view, global.drawing);
 
-  var dragAdds = true;
-
   function keyboardCallback(e) {
     if(e.key == "-") {
       global.view = zoomOut(global.view);
@@ -47,11 +46,6 @@ export function init(document) {
       global.view = resetZoom(global.view);
     }
 
-    if (e.key == "s" && e.metaKey) {
-      e.preventDefault();
-
-    }
-
     draw(global.canvas, global.view, global.drawing);
   }
   
@@ -61,7 +55,7 @@ export function init(document) {
 
     if (!modifierKey) {
       let xy = pixelToSquareXY(global.view, [x, y]);
-      dragAdds = !squareExistsAt(global.drawing, xy[0], xy[1])
+      global.dragAdds = !squareExistsAt(global.drawing, xy[0], xy[1])
       toggle(xy[0], xy[1]);
     }
   }
@@ -76,7 +70,7 @@ export function init(document) {
       y = xy[1];
       let exists = squareExistsAt(global.drawing, x, y);
 
-      if (dragAdds != exists) {
+      if (global.dragAdds != exists) {
         toggle(x, y);
       }
     }
