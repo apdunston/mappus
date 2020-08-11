@@ -8,12 +8,13 @@ import {Drawing, cloneDrawing} from "./models/drawing.js";
 var toolbarWidth = 100;
 
 export var global = {
-  view: new View(20),
   drawing: new Drawing(540, 540),
   history: new Array(),
   future: new Array(),
   mode: "draw",
-  dragAdds: true
+  dragAdds: true,
+  canvas: null,
+  view: null
 };
 
 export function toggle(x, y) {
@@ -22,16 +23,18 @@ export function toggle(x, y) {
   }
 
   global.drawing = toggleSquare(global.drawing, x, y);
-  draw(global.canvas, global.view, global.drawing);
+  draw(global.view, global.drawing);
 }
 
 export function init(document) {
   initToolbar(global, document);
   var canvas = document.getElementById("main");
   global.canvas = canvas;
+  global.view = new View(canvas, 20);
+
 
   setCanvasSize()
-  draw(global.canvas, global.view, global.drawing);
+  draw(global.view, global.drawing);
 
   function keyboardCallback(e) {
     if(e.key == "-") {
@@ -46,7 +49,7 @@ export function init(document) {
       global.view = resetZoom(global.view);
     }
 
-    draw(global.canvas, global.view, global.drawing);
+    draw(global.view, global.drawing);
   }
   
   function dragStartCallback(x, y, modifierKey) {
@@ -75,7 +78,7 @@ export function init(document) {
       }
     }
 
-    draw(global.canvas, global.view, global.drawing);
+    draw(global.view, global.drawing);
   }
 
   function dragEndCallback(_x, _y, _modifier) {
@@ -96,7 +99,7 @@ export function init(document) {
     ctx.canvas.height = global.drawing.height * global.view.pixelsPerSquare + 20;
     global.view.topLeftX = 10;
     global.view.topLeftY = 10;
-    draw(global.canvas, global.view, global.drawing);
+    draw(global.view, global.drawing);
   }
 
   initMouse(canvas, global.view, dragStartCallback, dragCallback, dragEndCallback, clickCallback);

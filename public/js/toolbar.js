@@ -32,7 +32,7 @@ export function init(global, document) {
     doLoad.addEventListener("click", _e => {
       let json = document.getElementById("load-box").value;
       global.drawing = JSON.parse(json);
-      draw(global.canvas, global.view, global.drawing);
+      draw(global.view, global.drawing);
       modal.close();
     })
   });
@@ -43,7 +43,7 @@ export function init(global, document) {
       global.drawing = global.history.pop();
     }
 
-    draw(global.canvas, global.view, global.drawing);
+    draw(global.view, global.drawing);
   });
 
   
@@ -53,7 +53,7 @@ export function init(global, document) {
       global.drawing = global.future.pop();
     }
 
-    draw(global.canvas, global.view, global.drawing);
+    draw(global.view, global.drawing);
   });
 
   var drawButton = document.getElementById("draw");

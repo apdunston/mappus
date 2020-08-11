@@ -1,15 +1,17 @@
 const zoomFactor = 0.8
 
 export class View {
-  constructor(pixelsPerSquare) {
+  constructor(canvas, pixelsPerSquare) {
     this.initialPixelsPerSquare = pixelsPerSquare;
     this.pixelsPerSquare = pixelsPerSquare;
     this.topLeftX = 10;
     this.topLeftY = 10;
+    this.canvas = canvas;
   }
 }
 
-export function draw(canvas, view, drawing) {
+export function draw(view, drawing) {
+  let canvas = view.canvas;
   var ctx = canvas.getContext("2d");
 
   // Canvas background
@@ -41,6 +43,10 @@ export function zoomOut(view) {
   }
 
   return view;
+}
+
+function middleOfView(view) {
+
 }
 
 export function zoomIn(view) {
