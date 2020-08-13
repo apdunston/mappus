@@ -27,7 +27,7 @@ export function toggle(x, y) {
     throw "You must initialize MappusEngine with a document that has a canvas before calling toggle.";
   }
 
-  global.drawing = toggleSquare(global.drawing, x, y);
+  toggleSquare(global.drawing, x, y);
   draw(global.view, global.drawing);
 }
 

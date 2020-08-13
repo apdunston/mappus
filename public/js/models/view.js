@@ -1,3 +1,5 @@
+import { squareExistsAt } from "./drawing.js";
+
 const zoomFactor = 0.8
 
 export class View {
@@ -26,13 +28,16 @@ export function draw(view, drawing) {
 
 
   // Squares
-  drawing.squares.forEach(square => {
-    let x = square[0] * view.pixelsPerSquare + view.topLeftX;
-    let y = square[1] * view.pixelsPerSquare + view.topLeftY;
-
-    ctx.fillStyle = "black";
-    ctx.fillRect(x, y, view.pixelsPerSquare, view.pixelsPerSquare);
-  });
+  for (let x = 0; x < drawing.width; x++) {
+    for (let y = 0; y < drawing.height; y++) {
+      if (squareExistsAt(drawing, x, y)) {
+        ctx.fillStyle = "black";
+        let x1 = x * view.pixelsPerSquare + view.topLeftX;
+        let y1 = y * view.pixelsPerSquare + view.topLeftY;
+        ctx.fillRect(x1, y1, view.pixelsPerSquare, view.pixelsPerSquare);    
+      }
+    }
+  }
 }
 
 function newTopLeftXY(view, newPixelsPerSquare) {
@@ -82,7 +87,7 @@ export function zoomOut(view) {
 
 export function resetZoom(view) {
   view = Object.assign({}, view);
-  
+
   let xy = newTopLeftXY(view, view.initialPixelsPerSquare);
   view.pixelsPerSquare = view.initialPixelsPerSquare;
   view.topLeftX = xy[0];
