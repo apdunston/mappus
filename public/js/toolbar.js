@@ -57,17 +57,18 @@ export function init(global, document) {
   });
 
   var drawButton = document.getElementById("draw");
-  var rectangleButton = document.getElementById("rectangle");
+  var fillButton = document.getElementById("fill");
+  drawButton.disabled = true;
 
   drawButton.addEventListener("click", _e => {
-    console.log("draw button")
-    rectangleButton.disabled = false;
+    global.mode = "draw";
+    fillButton.disabled = false;
     drawButton.disabled = true;
   });
 
-  rectangleButton.addEventListener("click", _e => {
-    console.log("rectangle button")
+  fillButton.addEventListener("click", _e => {
+    global.mode = "fill";
     drawButton.disabled = false;
-    rectangleButton.disabled = true;
+    fillButton.disabled = true;
   });
 }

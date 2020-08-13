@@ -1,7 +1,6 @@
 import {canvasToImage} from './otherPeoplesCode/canvas-to-image.js';
 import {View, draw, zoomOut, zoomIn, resetZoom} from "./models/view.js";
 import {toggleSquare} from "./models/drawing.js";
-import {init as initMouse} from "./mouse.js";
 import {init as initMouse2} from "./mouse2.js";
 import {init as initToolbar} from "./toolbar.js";
 import {Drawing} from "./models/drawing.js";

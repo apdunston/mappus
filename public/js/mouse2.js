@@ -35,10 +35,54 @@ export function init(global) {
     if (!modifierKey) {
       global.history.push(cloneDrawing(global.drawing));
       global.future = new Array();  
-      let xy = pixelToSquareXY(global.view, [x, y]);
-      global.dragAdds = !squareExistsAt(global.drawing, xy[0], xy[1])
-      toggle(xy[0], xy[1]);
+
+      if (global.mode == "draw") {
+        let xy = pixelToSquareXY(global.view, [x, y]);
+        global.dragAdds = !squareExistsAt(global.drawing, xy[0], xy[1])
+        toggle(xy[0], xy[1]);
+      } else if (global.mode == "fill") {
+        let xy = pixelToSquareXY(global.view, [x, y]);
+        fillFrom(xy[0], xy[1]);
+      }
+
+      draw(global.view, global.drawing);
     }
+  }
+
+  function fillFrom(x, y, checked, priorX, priorY) {
+    if (fillFromPrework(x, y, checked)) {
+      fillFrom(x - 1, y, checked);
+      fillFrom(x, y - 1, checked);
+      fillFrom(x + 1, y, checked);
+      fillFrom(x, y + 1, checked);
+    }
+  }
+
+  function fillFromPrework(x, y, checked, priorX, priorY) {
+    if (x == priorX && y == priorY) { return false }
+    console.log("checking");
+
+    if (checked === undefined) {
+      checked = [];
+    }
+
+    if (checked[x] === undefined) {
+      checked[x] = [];
+    }
+
+    if (checked[x][y]) {
+      return false;
+    }
+
+    checked[x][y] = true;
+
+    if (x < 0 || y < 0 || x >= global.drawing.width || y >= global.drawing.width ||
+        squareExistsAt(global.drawing, x, y)) {
+      return false;      
+    }
+
+    global.drawing.squares.push([x, y]);
+    return true;
   }
 
   function drag(e) {
@@ -48,11 +92,10 @@ export function init(global) {
     let y = e.offsetY;
     let modifierKey = checkModifierKey(e);
 
-    console.log("x", x, y, modifierKey);
     if (modifierKey) {
       global.view.topLeftX = global.dragStartTopLeftX - global.dragStartX + x;
       global.view.topLeftY = global.dragStartTopLeftY - global.dragStartY + y;
-    } else {
+    } else if (global.mode == "draw") {
       let xy = pixelToSquareXY(global.view, [x, y]);
       x = xy[0];
       y = xy[1];
