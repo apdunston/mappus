@@ -24,7 +24,6 @@ export function init(global) {
     let x = e.offsetX;
     let y = e.offsetY;
     let modifierKey = checkModifierKey(e);
-    console.log("dragStart", x, y, modifierKey);
 
     global.dragActive = true;
     global.dragStartX = x;
@@ -49,7 +48,7 @@ export function init(global) {
   }
 
   function fillFrom(x, y, checked) {
-    console.log("checking");
+    console.log("fill-checking");
 
     if (checked === undefined) {
       checked = [];

@@ -1,7 +1,7 @@
 import {canvasToImage} from './otherPeoplesCode/canvas-to-image.js';
 import {View, draw, zoomOut, zoomIn, resetZoom} from "./models/view.js";
-import {toggleSquare} from "./models/drawing.js";
-import {init as initMouse2} from "./mouse2.js";
+import {toggleSquare, setSquare} from "./models/drawing.js";
+import {init as initMouse} from "./mouse.js";
 import {init as initToolbar} from "./toolbar.js";
 import {Drawing} from "./models/drawing.js";
 
@@ -36,7 +36,6 @@ export function init(document) {
   var canvas = document.getElementById("main");
   global.canvas = canvas;
   global.view = new View(canvas, 20);
-
 
   setCanvasSize()
   draw(global.view, global.drawing);
@@ -76,7 +75,7 @@ export function init(document) {
   }
 
   // initMouse(canvas, global, dragStartCallback, dragCallback, dragEndCallback, clickCallback);
-  initMouse2(global);
+  initMouse(global);
   document.addEventListener("keypress", keyboardCallback);
 }
 

@@ -41,17 +41,13 @@ export function draw(view, drawing) {
 }
 
 function newTopLeftXY(view, newPixelsPerSquare) {
-  console.log(view.canvas.width, view.canvas.height, view.topLeftX, view.topLeftY, view.pixelsPerSquare);
-
   // Translate that to the location on the drawing in pixels
   let x1 = (view.canvas.width / 2) - view.topLeftX;
   let y1 = (view.canvas.height / 2) - view.topLeftY;
-  console.log("translation", x1, y1);
   
   // Do the translation again
   let x2 = x1 / view.pixelsPerSquare * newPixelsPerSquare;
   let y2 = y1 / view.pixelsPerSquare * newPixelsPerSquare;
-  console.log("translation", x2, y2);
 
   // Add the difference to topleft
   return [view.topLeftX + x1 - x2, view.topLeftY + y1 - y2];
