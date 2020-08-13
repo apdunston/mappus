@@ -2,9 +2,8 @@
 
 var view;
 
-export function init(container, inputView, dragStartCallback, dragCallback, dragEndCallback, clickCallback) {
-  var container = document.querySelector("#main");
-  view = inputView;
+export function init(container, global, dragStartCallback, dragCallback, dragEndCallback, clickCallback) {
+  view = global.view;
   var xOffset = view.topLeftX;
   var yOffset = view.topLeftY;
 
@@ -19,10 +18,8 @@ export function init(container, inputView, dragStartCallback, dragCallback, drag
   // Mac command key is "meta"
   container.addEventListener("click", e => {
     // console.log(e.button, e.which, e.ctrlKey, e.altKey, e.metaKey, e.shiftKey, e.movementX, e.movementY);  
-
     clickCallback(e.offsetX, e.offsetY, detectModifierKey(e));
   }, false);
-
 
   container.addEventListener("touchstart", dragStart, false);
   container.addEventListener("touchend", dragEnd, false);
@@ -45,6 +42,7 @@ export function init(container, inputView, dragStartCallback, dragCallback, drag
         initialX = e.clientX - xOffset;
         initialY = e.clientY - yOffset;
       }
+
     } else {
       initialX = e.offsetX;
       initialY = e.offsetY;

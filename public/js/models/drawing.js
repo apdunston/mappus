@@ -7,7 +7,13 @@ export class Drawing {
 }
 
 export function toggleSquare(drawing, x, y) {
- drawing = Object.assign({}, drawing);
+  drawing = Object.assign({}, drawing);
+
+  // Stay in bounds
+  if (x < 0 || y < 0 || x >= drawing.width || y >= drawing.height) {
+    return drawing;
+  }
+
  let squareIndex = drawing.squares.findIndex(xy => xy[0] == x && xy[1] == y); 
 
  if (squareIndex == -1) {

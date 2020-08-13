@@ -35,25 +35,46 @@ export function draw(view, drawing) {
   });
 }
 
-export function zoomOut(view) {
-  view = Object.assign({}, view);
+function newTopLeftXY(view, newPixelsPerSquare) {
+  console.log(view.canvas.width, view.canvas.height, view.topLeftX, view.topLeftY, view.pixelsPerSquare);
+
+  // Translate that to the location on the drawing in pixels
+  let x1 = (view.canvas.width / 2) - view.topLeftX;
+  let y1 = (view.canvas.height / 2) - view.topLeftY;
+  console.log("translation", x1, y1);
   
-  if (view.pixelsPerSquare > 1) {
-    view.pixelsPerSquare = Math.floor(view.pixelsPerSquare * zoomFactor);
-  }
+  // Do the translation again
+  let x2 = x1 / view.pixelsPerSquare * newPixelsPerSquare;
+  let y2 = y1 / view.pixelsPerSquare * newPixelsPerSquare;
+  console.log("translation", x2, y2);
 
-  return view;
-}
-
-function middleOfView(view) {
-
+  // Add the difference to topleft
+  return [view.topLeftX + x1 - x2, view.topLeftY + y1 - y2];
 }
 
 export function zoomIn(view) {
   view = Object.assign({}, view);
 
   if (view.pixelsPerSquare < 100) {
-    view.pixelsPerSquare = Math.ceil(view.pixelsPerSquare * (2 - zoomFactor));
+    let newPPS = Math.ceil(view.pixelsPerSquare * (2 - zoomFactor));
+    let xy = newTopLeftXY(view, newPPS);
+    view.pixelsPerSquare = newPPS;
+    view.topLeftX = xy[0];
+    view.topLeftY = xy[1];
+  }
+
+  return view;
+}
+
+export function zoomOut(view) {
+  view = Object.assign({}, view);
+  
+  if (view.pixelsPerSquare > 1) {
+    let newPPS = Math.floor(view.pixelsPerSquare * zoomFactor);
+    let xy = newTopLeftXY(view, newPPS);
+    view.pixelsPerSquare = newPPS;
+    view.topLeftX = xy[0];
+    view.topLeftY = xy[1];
   }
 
   return view;
@@ -61,7 +82,12 @@ export function zoomIn(view) {
 
 export function resetZoom(view) {
   view = Object.assign({}, view);
+  
+  let xy = newTopLeftXY(view, view.initialPixelsPerSquare);
   view.pixelsPerSquare = view.initialPixelsPerSquare;
+  view.topLeftX = xy[0];
+  view.topLeftY = xy[1];
+
   return view;
 }
 

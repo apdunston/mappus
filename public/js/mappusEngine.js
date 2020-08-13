@@ -1,9 +1,10 @@
 import {canvasToImage} from './otherPeoplesCode/canvas-to-image.js';
-import {View, draw, zoomOut, zoomIn, resetZoom, pixelToSquareXY} from "./models/view.js";
-import {toggleSquare, squareExistsAt} from "./models/drawing.js";
+import {View, draw, zoomOut, zoomIn, resetZoom} from "./models/view.js";
+import {toggleSquare} from "./models/drawing.js";
 import {init as initMouse} from "./mouse.js";
+import {init as initMouse2} from "./mouse2.js";
 import {init as initToolbar} from "./toolbar.js";
-import {Drawing, cloneDrawing} from "./models/drawing.js";
+import {Drawing} from "./models/drawing.js";
 
 var toolbarWidth = 100;
 
@@ -14,7 +15,12 @@ export var global = {
   mode: "draw",
   dragAdds: true,
   canvas: null,
-  view: null
+  view: null,
+  dragActive: null,
+  dragStartX: null,
+  dragStartY: null,
+  dragStartTopLeftX: null,
+  dragStartTopLeftY: null
 };
 
 export function toggle(x, y) {
@@ -51,38 +57,6 @@ export function init(document) {
 
     draw(global.view, global.drawing);
   }
-  
-  function dragStartCallback(x, y, modifierKey) {
-    global.history.push(cloneDrawing(global.drawing));
-    global.future = new Array();
-
-    if (!modifierKey) {
-      let xy = pixelToSquareXY(global.view, [x, y]);
-      global.dragAdds = !squareExistsAt(global.drawing, xy[0], xy[1])
-      toggle(xy[0], xy[1]);
-    }
-  }
-
-  function dragCallback(x, y, modifierKey) {
-    if (modifierKey) {
-      global.view.topLeftX = x;
-      global.view.topLeftY = y;
-    } else {
-      let xy = pixelToSquareXY(global.view, [x, y]);
-      x = xy[0];
-      y = xy[1];
-      let exists = squareExistsAt(global.drawing, x, y);
-
-      if (global.dragAdds != exists) {
-        toggle(x, y);
-      }
-    }
-
-    draw(global.view, global.drawing);
-  }
-
-  function dragEndCallback(_x, _y, _modifier) {
-  }
 
   function clickCallback(_x, _y, _modifierKey)  {
   }
@@ -102,7 +76,8 @@ export function init(document) {
     draw(global.view, global.drawing);
   }
 
-  initMouse(canvas, global.view, dragStartCallback, dragCallback, dragEndCallback, clickCallback);
+  // initMouse(canvas, global, dragStartCallback, dragCallback, dragEndCallback, clickCallback);
+  initMouse2(global);
   document.addEventListener("keypress", keyboardCallback);
 }
 
