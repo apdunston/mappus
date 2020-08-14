@@ -58,17 +58,40 @@ export function init(global, document) {
 
   var drawButton = document.getElementById("draw");
   var fillButton = document.getElementById("fill");
+  var lineButton = document.getElementById("line");
+
+  enableModeButtons();
   drawButton.disabled = true;
 
   drawButton.addEventListener("click", _e => {
     global.mode = "draw";
-    fillButton.disabled = false;
+    enableModeButtons();
     drawButton.disabled = true;
   });
 
   fillButton.addEventListener("click", _e => {
     global.mode = "fill";
-    drawButton.disabled = false;
+    enableModeButtons();
     fillButton.disabled = true;
   });
+
+  lineButton.addEventListener("click", _e => {
+    global.mode = "line";
+    enableModeButtons();
+    lineButton.disabled = true;
+  });
+
+  function enableModeButtons() {
+    global.lineStartX = null;
+    global.lineStartY = null;
+    global.lineEndX = null;
+    global.lineEndY = null;
+    drawButton.disabled = false;
+    fillButton.disabled = false;
+    lineButton.disabled = false;
+
+    if (global.view) {
+      draw(global.view, global.drawing);
+    }
+  }
 }

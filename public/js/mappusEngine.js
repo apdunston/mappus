@@ -19,7 +19,11 @@ export var global = {
   dragStartX: null,
   dragStartY: null,
   dragStartTopLeftX: null,
-  dragStartTopLeftY: null
+  dragStartTopLeftY: null,
+  lineStartX: null,
+  lineStartY: null,
+  lineEndX: null,
+  lineEndY: null
 };
 
 export function toggle(x, y) {

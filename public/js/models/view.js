@@ -1,4 +1,6 @@
 import { squareExistsAt } from "./drawing.js";
+import { global } from "../mappusEngine.js";
+import { squaresBetween} from "../geometry.js";
 
 const zoomFactor = 0.8
 
@@ -38,6 +40,24 @@ export function draw(view, drawing) {
       }
     }
   }
+
+  if (global.lineStartX != null) {
+    ctx.fillStyle = "grey";
+    let x1 = global.lineStartX * view.pixelsPerSquare + view.topLeftX;
+    let y1 = global.lineStartY * view.pixelsPerSquare + view.topLeftY;
+    ctx.fillRect(x1, y1, view.pixelsPerSquare, view.pixelsPerSquare);  
+  }
+
+  if (global.lineEndX != null) {
+    squaresBetween(global.lineStartX, global.lineStartY, 
+        global.lineEndX, global.lineEndY).forEach(xy => {
+      ctx.fillStyle = "grey";
+      let x1 = xy[0] * view.pixelsPerSquare + view.topLeftX;
+      let y1 = xy[1] * view.pixelsPerSquare + view.topLeftY;
+      ctx.fillRect(x1, y1, view.pixelsPerSquare, view.pixelsPerSquare);    
+    });
+  }
+
 }
 
 function newTopLeftXY(view, newPixelsPerSquare) {

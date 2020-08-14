@@ -3,6 +3,7 @@ import {squareExistsAt} from "./models/drawing.js";
 import {toggle} from "./mappusEngine.js";
 import {draw} from "./models/view.js";
 import {cloneDrawing, setSquare} from "./models/drawing.js";
+import { squaresBetween} from "./geometry.js";
 
 
 export function init(global) {
@@ -20,6 +21,11 @@ export function init(global) {
   function deltaY(e) { return global.dragStartY + e.offsetY }
   function checkModifierKey(e) { return e.ctrlKey || e.altKey || e.metaKey || e.shiftKey }
 
+  function addHistory() {
+    global.history.push(cloneDrawing(global.drawing));
+    global.future = new Array();  
+  }
+
   function dragStart(e) {
     let x = e.offsetX;
     let y = e.offsetY;
@@ -32,15 +38,33 @@ export function init(global) {
     global.dragStartTopLeftY = global.view.topLeftY;
 
     if (!modifierKey) {
-      global.history.push(cloneDrawing(global.drawing));
-      global.future = new Array();  
       let xy = pixelToSquareXY(global.view, [x, y]);
       global.dragAdds = !squareExistsAt(global.drawing, xy[0], xy[1])
 
       if (global.mode == "draw") {
+        addHistory();
         toggle(xy[0], xy[1]);
       } else if (global.mode == "fill") {
+        addHistory();
         fillFrom(xy[0], xy[1]);
+      } else if (global.mode == "line") {
+        if (global.lineStartX) {
+          addHistory();
+
+          // Set line
+          squaresBetween(global.lineStartX, global.lineStartY, 
+                global.lineEndX, global.lineEndY).forEach(xy => {
+            setSquare(global.drawing, xy[0], xy[1], true);
+          })
+
+          global.lineStartX = null;
+          global.lineStartY = null;
+          global.lineEndX = null;
+          global.lineEndY = null;
+        } else {
+          global.lineStartX = xy[0];
+          global.lineStartY = xy[1];
+        }
       }
 
       draw(global.view, global.drawing);
@@ -78,17 +102,24 @@ export function init(global) {
   }
 
   function drag(e) {
-    if (!global.dragActive) {return;}
-
     let x = e.offsetX;
     let y = e.offsetY;
+    let xy = pixelToSquareXY(global.view, [x, y]);
+
+    if (global.mode == "line" && global.lineStartX != null) {
+      global.lineEndX = xy[0];
+      global.lineEndY = xy[1];
+      draw(global.view, global.drawing);
+    }
+
+    if (!global.dragActive) {return;}
+
     let modifierKey = checkModifierKey(e);
 
     if (modifierKey) {
       global.view.topLeftX = global.dragStartTopLeftX - global.dragStartX + x;
       global.view.topLeftY = global.dragStartTopLeftY - global.dragStartY + y;
     } else if (global.mode == "draw") {
-      let xy = pixelToSquareXY(global.view, [x, y]);
       x = xy[0];
       y = xy[1];
       setSquare(global.drawing, x, y, global.dragAdds);
