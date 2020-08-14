@@ -1,7 +1,12 @@
 import {Modal} from "./otherPeoplesCode/modal.js";
 import {draw} from "./models/view.js";
 
-export function init(global, document) {
+var modal;
+var modalBody;
+var global;
+
+export function init(inputGlobal, document) {
+  global = inputGlobal;
   var img = document.getElementById("img");
   img.addEventListener("click", function () {
     fullSizeCanvas();
@@ -12,8 +17,8 @@ export function init(global, document) {
     });
   });
   
-  const modal = new Modal(document.querySelector('.modal-overlay'));
-  var modalBody = document.getElementById("modal-body");
+  modal = new Modal(document.querySelector('.modal-overlay'));
+  modalBody = document.getElementById("modal-body");
 
   var save = document.getElementById("save");
   save.addEventListener("click", _e => {
@@ -32,11 +37,6 @@ export function init(global, document) {
     doLoad.addEventListener("click", _e => {
       let json = document.getElementById("load-box").value;
       global.drawing.import(JSON.parse(json));
-      //!!ADRIAN
-      // let imported = JSON.parse(json);
-      // global.drawing.width = imported.width;
-      // global.drawing.height = imported.height;
-      // global.drawing.squares = imported.squares;
       draw(global.view, global.drawing);
       modal.close();
     })
@@ -107,4 +107,25 @@ export function init(global, document) {
       draw(global.view, global.drawing);
     }
   }
+
+}
+
+export function labelModal(x, y) {
+  modalBody.innerHTML = `
+    [${x}, ${y}]
+    <br>
+    <textarea id="label-box" style="width: 300px; height: 200px"></textarea>
+    <br>
+    <button id="set-label">Set Label</button>
+  `;    
+
+  modal.open();
+  var doLabel = document.getElementById("set-label");
+
+  doLabel.addEventListener("click", _e => {
+    let labelValue = document.getElementById("label-box").value;
+    global.drawing.addLabel(x, y, labelValue);
+    draw(global.view, global.drawing);
+    modal.close();
+  })
 }

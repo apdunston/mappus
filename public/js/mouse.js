@@ -3,7 +3,8 @@ import {squareExistsAt} from "./models/drawing.js";
 import {toggle} from "./mappusEngine.js";
 import {draw} from "./models/view.js";
 import {cloneDrawing, setSquare} from "./models/drawing.js";
-import { squaresBetween} from "./geometry.js";
+import {squaresBetween} from "./geometry.js";
+import {labelModal} from "./toolbar.js";
 
 
 export function init(global) {
@@ -44,6 +45,9 @@ export function init(global) {
       if (global.mode == "draw") {
         addHistory();
         toggle(xy[0], xy[1]);
+      } else if (global.mode == "label") {
+        addHistory();
+        labelModal(xy[0], xy[1]);
       } else if (global.mode == "fill") {
         addHistory();
         fillFrom(xy[0], xy[1]);

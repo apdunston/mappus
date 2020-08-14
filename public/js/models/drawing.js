@@ -3,6 +3,7 @@ export class Drawing {
     this.width = width;
     this.height = height;
     this.squares = [];
+    this.labels = [];
   }
 
   export() {
@@ -20,6 +21,7 @@ export class Drawing {
     return {
       width: this.width,
       height: this.height,
+      labels: this.labels,
       squares: exportSquares
     }
   }
@@ -27,8 +29,21 @@ export class Drawing {
   import(input) {
     this.width = input.width;
     this.height = input.height;
+    this.labels = input.labels || [];
 
     input.squares.forEach(xy => setSquare(this, xy[0], xy[1], true));
+  }
+
+  // Adds or removes a label
+  addLabel(x, y, value) {
+    if (value == "") {
+      let labelIndex = this.labels.findIndex(l => l.x == x && l.y == y);
+      if (labelIndex != -1) {
+        this.labels.splice(labelIndex, 1);
+      }
+    } else {
+      this.labels.push({x: x, y: y, value: value});
+    }
   }
 }
 

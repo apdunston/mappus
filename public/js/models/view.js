@@ -28,7 +28,6 @@ export function draw(view, drawing) {
 
   drawGrid(ctx, view, drawing);
 
-
   // Squares
   for (let x = 0; x < drawing.width; x++) {
     for (let y = 0; y < drawing.height; y++) {
@@ -41,6 +40,17 @@ export function draw(view, drawing) {
     }
   }
 
+  // Labels
+
+  global.drawing.labels.forEach(label => {
+    ctx.fillStyle = "purple";
+    let x1 = label.x * view.pixelsPerSquare + view.topLeftX;
+    let y1 = label.y * view.pixelsPerSquare + view.topLeftY;
+    ctx.fillRect(x1, y1, view.pixelsPerSquare, view.pixelsPerSquare);    
+
+  })
+
+  // Line tool
   if (global.lineStartX != null) {
     ctx.fillStyle = "grey";
     let x1 = global.lineStartX * view.pixelsPerSquare + view.topLeftX;
