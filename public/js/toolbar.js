@@ -17,7 +17,7 @@ export function init(global, document) {
 
   var save = document.getElementById("save");
   save.addEventListener("click", _e => {
-    modalBody.innerHTML = `<textarea style="width: 300px; height: 200px">${JSON.stringify(global.drawing)}</textarea>`;
+    modalBody.innerHTML = `<textarea style="width: 300px; height: 200px">${JSON.stringify(global.drawing.export())}</textarea>`;
     modal.open();
   });
 
@@ -31,7 +31,12 @@ export function init(global, document) {
     var doLoad = document.getElementById("do-load");
     doLoad.addEventListener("click", _e => {
       let json = document.getElementById("load-box").value;
-      global.drawing = JSON.parse(json);
+      global.drawing.import(JSON.parse(json));
+      //!!ADRIAN
+      // let imported = JSON.parse(json);
+      // global.drawing.width = imported.width;
+      // global.drawing.height = imported.height;
+      // global.drawing.squares = imported.squares;
       draw(global.view, global.drawing);
       modal.close();
     })
@@ -59,6 +64,7 @@ export function init(global, document) {
   var drawButton = document.getElementById("draw");
   var fillButton = document.getElementById("fill");
   var lineButton = document.getElementById("line");
+  var labelButton = document.getElementById("label");
 
   enableModeButtons();
   drawButton.disabled = true;
@@ -81,6 +87,12 @@ export function init(global, document) {
     lineButton.disabled = true;
   });
 
+  labelButton.addEventListener("click", _e => {
+    global.mode = "label";
+    enableModeButtons();
+    label.disabled = true;
+  });
+
   function enableModeButtons() {
     global.lineStartX = null;
     global.lineStartY = null;
@@ -89,6 +101,7 @@ export function init(global, document) {
     drawButton.disabled = false;
     fillButton.disabled = false;
     lineButton.disabled = false;
+    labelButton.disabled = false;
 
     if (global.view) {
       draw(global.view, global.drawing);

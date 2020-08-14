@@ -4,6 +4,32 @@ export class Drawing {
     this.height = height;
     this.squares = [];
   }
+
+  export() {
+    let exportSquares = [];
+
+    for (let x = 0; x < this.squares.length; x++) {
+      console.log("row")
+      let row = this.squares[x] || [];
+
+      for (let y = 0; y < row.length; y++) {
+        if (row[y]) {exportSquares.push([x, y])}
+      }
+    }
+
+    return {
+      width: this.width,
+      height: this.height,
+      squares: exportSquares
+    }
+  }
+
+  import(input) {
+    this.width = input.width;
+    this.height = input.height;
+
+    input.squares.forEach(xy => setSquare(this, xy[0], xy[1], true));
+  }
 }
 
 export function toggleSquare(drawing, x, y) {
