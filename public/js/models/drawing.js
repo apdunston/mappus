@@ -44,6 +44,17 @@ export class Drawing {
     } else {
       this.labels.push({x: x, y: y, value: value});
     }
+
+    this.labels.sort((a, b) => (a.y - b.y) * this.height + (a.x - b.x));
+  }
+
+  labelAt(x, y) {
+    let label = this.labels.find(l => l.x == x && l.y == y);
+    if (label) {
+      return label;
+    } else {
+      return null;
+    }
   }
 }
 
@@ -73,6 +84,7 @@ export function squareExistsAt(drawing, x, y) {
 export function cloneDrawing(drawing) {
   let newDrawing = new Drawing(drawing.width, drawing.height);
   newDrawing.squares = [];
+  newDrawing.labels = [];
 
   for (let x = 0; x < drawing.width; x++) {
     newDrawing.squares[x] = [];
@@ -81,6 +93,10 @@ export function cloneDrawing(drawing) {
       newDrawing.squares[x][y] = drawing.squares[x][y];
     }
   }
+
+  drawing.labels.forEach(l => {
+    newDrawing.addLabel(l.x, l.y, l.value);
+  })
 
   return newDrawing;
 }

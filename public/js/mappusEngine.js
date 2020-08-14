@@ -1,6 +1,6 @@
 import {canvasToImage} from './otherPeoplesCode/canvas-to-image.js';
 import {View, draw, zoomOut, zoomIn, resetZoom} from "./models/view.js";
-import {toggleSquare, setSquare} from "./models/drawing.js";
+import {cloneDrawing, toggleSquare, setSquare} from "./models/drawing.js";
 import {init as initMouse} from "./mouse.js";
 import {init as initToolbar} from "./toolbar.js";
 import {Drawing} from "./models/drawing.js";
@@ -23,7 +23,9 @@ export var global = {
   lineStartX: null,
   lineStartY: null,
   lineEndX: null,
-  lineEndY: null
+  lineEndY: null,
+  mouseX: null,
+  mouseY: null,
 };
 
 export function toggle(x, y) {
@@ -83,3 +85,7 @@ export function init(document) {
   document.addEventListener("keypress", keyboardCallback);
 }
 
+export function addHistory() {
+  global.history.push(cloneDrawing(global.drawing));
+  global.future = new Array();  
+}

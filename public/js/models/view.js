@@ -41,14 +41,34 @@ export function draw(view, drawing) {
   }
 
   // Labels
+  let num = 10;
 
   global.drawing.labels.forEach(label => {
-    ctx.fillStyle = "purple";
-    let x1 = label.x * view.pixelsPerSquare + view.topLeftX;
-    let y1 = label.y * view.pixelsPerSquare + view.topLeftY;
-    ctx.fillRect(x1, y1, view.pixelsPerSquare, view.pixelsPerSquare);    
+    let multiplier = 1;
+    if (num > 9) { multiplier = 0.7; }
+    if (squareExistsAt(global.drawing, label.x, label.y)) {
+      ctx.fillStyle = "white";
+    } else {
+      ctx.fillStyle = "black";
+    }
+    let fontSize = view.pixelsPerSquare * multiplier;    
+    ctx.font = `${fontSize}px Courier`;
+    let x1 = label.x * view.pixelsPerSquare + view.topLeftX + (view.pixelsPerSquare * 0.2 * multiplier);
+    let y1 = label.y * view.pixelsPerSquare + view.topLeftY + (view.pixelsPerSquare * 0.9 * multiplier);
+    ctx.fillText(num, x1, y1); 
+    num++;
+  });
 
-  })
+  // Current label
+  let label = global.drawing.labelAt(global.mouseX, global.mouseY);
+
+  if (label != null) {
+    ctx.font = `${view.pixelsPerSquare}px Courier`;
+    let x1 = (label.x+1) * view.pixelsPerSquare + view.topLeftX + view.pixelsPerSquare;
+    let y1 = (label.y-1) * view.pixelsPerSquare + view.topLeftY + view.pixelsPerSquare - 2;
+    ctx.fillStyle = "grey";
+    ctx.fillText(label.value, x1, y1);
+  }
 
   // Line tool
   if (global.lineStartX != null) {
