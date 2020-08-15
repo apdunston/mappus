@@ -10,7 +10,6 @@ export class Drawing {
     let exportSquares = [];
 
     for (let x = 0; x < this.squares.length; x++) {
-      console.log("row")
       let row = this.squares[x] || [];
 
       for (let y = 0; y < row.length; y++) {
@@ -18,10 +17,14 @@ export class Drawing {
       }
     }
 
+    let exportLabels = [];
+
+    this.labels.forEach(l => exportLabels.push([l.x, l.y, l.value]));
+
     return {
       width: this.width,
       height: this.height,
-      labels: this.labels,
+      labels: exportLabels,
       squares: exportSquares
     }
   }
@@ -29,9 +32,10 @@ export class Drawing {
   import(input) {
     this.width = input.width;
     this.height = input.height;
-    this.labels = input.labels || [];
+    this.labels = [];
 
     input.squares.forEach(xy => setSquare(this, xy[0], xy[1], true));
+    input.labels.forEach(xyv => this.addLabel(xyv[0], xyv[1], xyv[2]));
   }
 
   // Adds or removes a label

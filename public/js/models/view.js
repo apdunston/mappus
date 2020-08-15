@@ -2,7 +2,8 @@ import { squareExistsAt } from "./drawing.js";
 import { global } from "../mappusEngine.js";
 import { squaresBetween} from "../geometry.js";
 
-const zoomFactor = 0.8
+const zoomFactor = 0.8;
+const minFontSize = 20;
 
 export class View {
   constructor(canvas, pixelsPerSquare) {
@@ -41,7 +42,7 @@ export function draw(view, drawing) {
   }
 
   // Labels
-  let num = 10;
+  let num = 1;
 
   global.drawing.labels.forEach(label => {
     let multiplier = 1;
@@ -51,7 +52,17 @@ export function draw(view, drawing) {
     } else {
       ctx.fillStyle = "black";
     }
+
     let fontSize = view.pixelsPerSquare * multiplier;    
+
+    if (fontSize < minFontSize) { 
+      if (fontSize < minFontSize * 0.5) {
+        ctx.fillStyle = "gray"; 
+      }
+
+      fontSize = minFontSize;
+    }
+
     ctx.font = `${fontSize}px Courier`;
     let x1 = label.x * view.pixelsPerSquare + view.topLeftX + (view.pixelsPerSquare * 0.2 * multiplier);
     let y1 = label.y * view.pixelsPerSquare + view.topLeftY + (view.pixelsPerSquare * 0.9 * multiplier);
@@ -63,7 +74,7 @@ export function draw(view, drawing) {
   let label = global.drawing.labelAt(global.mouseX, global.mouseY);
 
   if (label != null) {
-    ctx.font = `${view.pixelsPerSquare}px Courier`;
+    ctx.font = `${Math.max(view.pixelsPerSquare, minFontSize)}px Courier`;
     let x1 = (label.x+1) * view.pixelsPerSquare + view.topLeftX + view.pixelsPerSquare;
     let y1 = (label.y-1) * view.pixelsPerSquare + view.topLeftY + view.pixelsPerSquare - 2;
     ctx.fillStyle = "grey";
