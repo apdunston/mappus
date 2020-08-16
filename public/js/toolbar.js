@@ -1,6 +1,6 @@
 import {Modal} from "./otherPeoplesCode/modal.js";
 import {draw} from "./models/view.js";
-import {addHistory} from "./mappusEngine.js";
+import {addHistory, fullSizeCanvas} from "./mappusEngine.js";
 
 var modal;
 var modalBody;

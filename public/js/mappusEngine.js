@@ -71,18 +71,19 @@ export function init(document) {
     ctx.canvas.height = window.innerHeight;  
   }
 
-  function fullSizeCanvas() {
-    var ctx = global.canvas.getContext("2d");
-    ctx.canvas.width  = global.drawing.width * global.view.pixelsPerSquare + 20;
-    ctx.canvas.height = global.drawing.height * global.view.pixelsPerSquare + 20;
-    global.view.topLeftX = 10;
-    global.view.topLeftY = 10;
-    draw(global.view, global.drawing);
-  }
-
   // initMouse(canvas, global, dragStartCallback, dragCallback, dragEndCallback, clickCallback);
   initMouse(global);
   document.addEventListener("keypress", keyboardCallback);
+}
+
+
+export function fullSizeCanvas() {
+  var ctx = global.canvas.getContext("2d");
+  ctx.canvas.width  = global.drawing.width * global.view.pixelsPerSquare + 20;
+  ctx.canvas.height = global.drawing.height * global.view.pixelsPerSquare + 20;
+  global.view.topLeftX = 10;
+  global.view.topLeftY = 10;
+  draw(global.view, global.drawing);
 }
 
 export function addHistory() {
