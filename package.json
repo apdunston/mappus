@@ -4,7 +4,9 @@
   "description": "Browser-based mapping",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --require @babel/register",
+    "start": "http-server ./public",
+    "build": "babel public/js -d dist --presets=@babel/preset-env"
   },
   "keywords": [
     "d"
@@ -22,11 +24,7 @@
     "sinon": "^7.3.2"
   },
   "dependencies": {
-    "canvas-to-image": "^2.2.0"
-  },
-  "scripts": {
-    "test": "mocha --require @babel/register",
-    "start": "http-server ./public",
-    "build": "babel public/js -d dist --presets=@babel/preset-env"
+    "canvas-to-image": "^2.2.0",
+    "http-server": "^0.12.3"
   }
 }
