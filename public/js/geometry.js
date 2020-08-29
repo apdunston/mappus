@@ -1,6 +1,12 @@
 // https://www.redblobgames.com/grids/line-drawing.html
 
 export function squaresBetween(x1, y1, x2, y2) {
+  // return firstTry(x1, y1, x2, y2);
+  // return secondTry(x1, y1, x2, y2);
+  return lerpAlgorithm(x1, y1, x2, y2);
+}
+
+function lerpAlgorithm(x1, y1, x2, y2) {
   var points = [];
   var N = diagonal_distance(x1, y1, x2, y2);
 
@@ -9,7 +15,6 @@ export function squaresBetween(x1, y1, x2, y2) {
       points.push(round_point(lerp_point(x1, y1, x2, y2, t)));
   }
   
-  console.log(points);
   return points;
 }
 

@@ -1,3 +1,4 @@
+import {canvasToImage} from './otherPeoplesCode/canvas-to-image.js';
 import {Modal} from "./otherPeoplesCode/modal.js";
 import {draw} from "./models/view.js";
 import {addHistory, fullSizeCanvas} from "./mappusEngine.js";
